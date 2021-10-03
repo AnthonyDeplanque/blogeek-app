@@ -1,6 +1,2 @@
 "use strict";
-console.log(" ");
-console.log(" ");
-console.log(" ");
-console.log(" ");
-console.log("Bonjour Raphaêlle");
+console.log("hello world");
