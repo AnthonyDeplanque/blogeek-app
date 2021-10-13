@@ -1,5 +1,4 @@
 import React from 'react';
-import './App.css';
 import { Box } from '@mui/system';
 import { Typography } from '@mui/material';
 interface props { };

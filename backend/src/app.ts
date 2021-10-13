@@ -2,6 +2,8 @@ require('dotenv').config();
 const cors = require('cors');
 const path = require('path');
 
+
+
 import { router } from './routes/index';
 const express = require('express');
 const app = express();
@@ -20,3 +22,4 @@ router(app);
 app.listen(port, () => {
   console.log(`Server listening on port ${port}`);
 });
+

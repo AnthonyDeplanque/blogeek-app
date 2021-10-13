@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node build/app.js",
-    "dev": "ts-node ./src/app.ts"
+    "dev": "nodemon ./src/app.ts",
+    "dbup": "db-migrate up",
+    "dbdown": "db-migrate down"
   },
   "keywords": [],
   "author": "",
