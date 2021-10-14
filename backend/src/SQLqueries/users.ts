@@ -31,7 +31,7 @@ const getHashedPasswordByNickname = (value: string) => {
 }
 
 const getSelectedUsersQuery = (first: number, last: number) => {
-  return db.query(`SELECT * FROM USERS LIMIT ?, ?`, [first, last]);
+  return db.query(`SELECT * FROM USERS ORDER BY inscription_time LIMIT ?, ?`, [first, last]);
 }
 
 const updateUserQuery = (id: string, values: any) => {
