@@ -1,12 +1,15 @@
 import * as express from 'express';
-import { getTextOfJSDocComment } from 'typescript';
 import { ServerDetails, ServerResponses } from '../config/serverResponses';
 import { Users } from "../models/Users";
 import { generatedId } from '../services/idGenerator';
+import { Role, ROLES } from '../models/Role';
+import { request, ServerResponse } from 'http';
 
 const argon2 = require("argon2");
 const Joi = require('joi');
 const usersQueries = require('../SQLqueries/users');
+const rolesToUsersQueries = require('../SQLqueries/rolesToUsers');
+const rolesQueries = require('../SQLqueries/roles')
 const usersMiddlewares = require('../middlewares/users');
 const JWTServices = require('../services/jwt');
 
@@ -44,11 +47,23 @@ const postUser = async (req: express.Request, res: express.Response) => {
           } else
           {
             const newUser = { id, nick_name, first_name, last_name, email, hashed_password, inscription_time, avatar, biography }
-            usersQueries.addUserQuery(newUser).then(([_results]: any) => {
-              res.status(201).json({ ...newUser, response: { message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK } })
-            }).catch((err: unknown) => {
-              console.error(err);
-              res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_CREATION })
+            rolesQueries.getOneRoleQueryByName(ROLES.ROLE_USER).then(([[results]]: [[Role]]) => {
+              const role = results;
+              usersQueries.addUserQuery(newUser).then(([result]: any) => {
+                rolesToUsersQueries.addRoleToUserQuery({ id: generatedId(), id_user: id, id_role: role.id }).then(([[results]]: any) => {
+
+                  res.status(201).json({ ...newUser, role, roleToUser: results, response: { message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK } })
+                }).catch((error: unknown) => {
+                  console.error(error);
+                  res.status(500).json({ message: ServerResponses.BAD_REQUEST, detail: ServerDetails.ERROR_CREATION, step: 'set role for user' })
+                });
+              }).catch((err: unknown) => {
+                console.error(err);
+                res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_CREATION })
+              });
+            }).catch((error: unknown) => {
+              console.error(error);
+              res.status(500).json({ message: ServerResponses.BAD_REQUEST, detail: ServerDetails.ERROR_RETRIEVING, step: 'get role by name' })
             });
           }
         }).catch((err: unknown) => {
@@ -82,11 +97,19 @@ const loginUser = (req: express.Request, res: express.Response) => {
             {
               usersQueries.getOneUserQueryByNickname(nick_name).then(([[results]]: any) => {
                 const token = JWTServices.createToken(results.email);
-                res.status(200).json({
-                  ...results,
-                  token: token,
-                  message: ServerResponses.REQUEST_OK
-                });
+                rolesToUsersQueries.getRolesForUserQuery(results.id).then(([[roles]]: any) => {
+                  res.status(200).json({
+                    ...results,
+                    roles,
+                    token: token,
+                    message: ServerResponses.REQUEST_OK
+                  });
+                }).catch((error: unknown) => {
+                  console.error(error);
+                  res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_RETRIEVING, step: 'UserHasRole' });
+                })
+
+
               });
             } else
             {
@@ -118,7 +141,12 @@ const getUserProfile = (req: express.Request, res: express.Response) => {
     {
       usersQueries.getOneUserQueryByEmail(data)
         .then(([[results]]: any) => {
-          res.status(200).json({ ...results, expirationTimestamp: exp * 1000, message: ServerResponses.REQUEST_OK });
+          rolesToUsersQueries.getRolesForUserQuery(results.id).then(([[roles]]: [any]) => {
+            res.status(200).json({ ...results, roles, expirationTimestamp: exp * 1000, message: ServerResponses.REQUEST_OK });
+          }).catch((error: unknown) => {
+            console.error(error)
+            res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_RETRIEVING, step: 'UsersHasRole' });
+          })
         })
         .catch((error: unknown) => {
           console.error(error);
