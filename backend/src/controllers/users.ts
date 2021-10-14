@@ -7,7 +7,8 @@ const argon2 = require("argon2");
 const Joi = require('joi');
 const usersQueries = require('../SQLqueries/users');
 const usersMiddlewares = require('../middlewares/users');
-const uniqid = require('uniqid');
+const JWTServices = require('../services/jwt');
+
 
 const postUser = async (req: express.Request, res: express.Response) => {
   const { nick_name, first_name, last_name, email, password, avatar, biography } = req.body;
@@ -62,10 +63,47 @@ const postUser = async (req: express.Request, res: express.Response) => {
 
 }
 
+const loginUser = (req: express.Request, res: express.Response) => {
+  const { nick_name, password } = req.body;
+  const { error } = Joi.object(usersMiddlewares.loginUserValidationObject).validate({ nick_name, password }, { abortEarly: false });
+  if (error)
+  {
+    console.error(error);
+    res.status(422).json({ validationError: error.details });
+  } else
+  {
+    usersQueries.getHashedPasswordByNickname(nick_name)
+      .then(async ([[results]]: any) => {
+        argon2.verify(results.hashed_password, password).then((match: boolean) => {
+          if (match)
+          {
+            usersQueries.getOneUserQueryByNickname(nick_name).then(([[results]]: any) => {
+              const token = JWTServices.createToken(results.email);
+              res.status(200).json({
+                ...results,
+                token: token,
+                message: ServerResponses.REQUEST_OK
+              });
+            });
+          } else
+          {
+            res.status(401).json({ message: ServerResponses.ACCESS_DENIED });
+          }
+        }).catch((error: any) => {
+          console.error(error);
+          res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_RETRIEVING });
+        });
+      }).catch((error: any) => {
+        console.error(error);
+        res.status(204).json({ message: ServerResponses.ACCESS_DENIED, detail: ServerDetails.CHECK_CREDENTIALS });
+      });
+  }
+}
+
 const getAllUsers = (req: express.Request, res: express.Response) => {
   usersQueries.getUsersQuery()
     .then(([result]: Users[]) => res.status(200).json(result))
     .catch((error: any) => res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: error }))
 }
 
-module.exports = { getAllUsers, postUser }
+module.exports = { getAllUsers, postUser, loginUser }

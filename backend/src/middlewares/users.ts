@@ -17,7 +17,6 @@ const updateUserValidationObject = {
   last_name: Joi.string().max(50),
   nick_name: Joi.string().max(50),
   email: Joi.string().email({ minDomainSegments: 2 }).max(150),
-  hashed_password: Joi.string().max(100),
   inscription_time: Joi.number(),
   avatar: Joi.string().max(250).allow(null, ''),
   biography: Joi.string().max(250).allow(null, ''),
@@ -28,8 +27,8 @@ const updateUserPasswordValidationObject = {
 }
 
 const loginUserValidationObject = {
-  email: Joi.string().email({ minDomainSegments: 2 }).max(150).required(),
-  hashed_password: Joi.string().max(100).required(),
+  nick_name: Joi.string().max(50).required(),
+  password: Joi.string().max(100).required(),
 }
 
 module.exports = { postUserValidationObject, updateUserPasswordValidationObject, updateUserValidationObject, loginUserValidationObject }

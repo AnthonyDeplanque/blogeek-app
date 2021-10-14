@@ -26,6 +26,9 @@ const getOneUserQueryByEmail = (value: string) => {
 const getHashedPasswordByEmail = (value: string) => {
   return db.query(`SELECT hashed_password FROM USERS WHERE email = ?`, [value]);
 }
+const getHashedPasswordByNickname = (value: string) => {
+  return db.query(`SELECT hashed_password FROM USERS WHERE nick_name = ?`, [value]);
+}
 
 const getSelectedUsersQuery = (first: number, last: number) => {
   return db.query(`SELECT * FROM USERS LIMIT ?, ?`, [first, last]);
@@ -46,6 +49,7 @@ module.exports = {
   getOneUserQueryByEmail,
   getOneUserQueryByNickname,
   getHashedPasswordByEmail,
+  getHashedPasswordByNickname,
   getSelectedUsersQuery,
   updateUserQuery,
   deleteUserQuery,
