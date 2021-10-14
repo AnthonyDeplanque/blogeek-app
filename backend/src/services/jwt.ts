@@ -1,5 +1,3 @@
-import jwt from "express-jwt";
-
 const JWT = require('jsonwebtoken');
 const expressJWT = require("express-jwt");
 

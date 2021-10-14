@@ -44,7 +44,7 @@ const postUser = async (req: express.Request, res: express.Response) => {
           {
             const newUser = { id, nick_name, first_name, last_name, email, hashed_password, inscription_time, avatar, biography }
             usersQueries.addUserQuery(newUser).then(([results]: any) => {
-              res.status(201).json({ ...newUser, response: { message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK } })
+              res.status(201).json({ result: { results }, addedUser: { ...newUser }, response: { message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK } })
             }).catch((err: any) => {
               console.error(err);
               res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_CREATION })
@@ -74,25 +74,31 @@ const loginUser = (req: express.Request, res: express.Response) => {
   {
     usersQueries.getHashedPasswordByNickname(nick_name)
       .then(async ([[results]]: any) => {
-        argon2.verify(results.hashed_password, password).then((match: boolean) => {
-          if (match)
-          {
-            usersQueries.getOneUserQueryByNickname(nick_name).then(([[results]]: any) => {
-              const token = JWTServices.createToken(results.email);
-              res.status(200).json({
-                ...results,
-                token: token,
-                message: ServerResponses.REQUEST_OK
+        if (results)
+        {
+          argon2.verify(results.hashed_password, password).then((match: boolean) => {
+            if (match)
+            {
+              usersQueries.getOneUserQueryByNickname(nick_name).then(([[results]]: any) => {
+                const token = JWTServices.createToken(results.email);
+                res.status(200).json({
+                  ...results,
+                  token: token,
+                  message: ServerResponses.REQUEST_OK
+                });
               });
-            });
-          } else
-          {
-            res.status(401).json({ message: ServerResponses.ACCESS_DENIED });
-          }
-        }).catch((error: any) => {
-          console.error(error);
-          res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_RETRIEVING });
-        });
+            } else
+            {
+              res.status(401).json({ message: ServerResponses.ACCESS_DENIED });
+            }
+          }).catch((error: any) => {
+            console.error(error);
+            res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_RETRIEVING });
+          });
+        } else
+        {
+          res.status(404).json({ message: ServerResponses.NOT_FOUND });
+        }
       }).catch((error: any) => {
         console.error(error);
         res.status(204).json({ message: ServerResponses.ACCESS_DENIED, detail: ServerDetails.CHECK_CREDENTIALS });
@@ -132,7 +138,8 @@ const getUserProfile = (req: express.Request, res: express.Response) => {
 
 
 
-const getAllUsers = (req: express.Request, res: express.Response) => {
+const getAllUsers = (_req: express.Request, res: express.Response) => {
+
   usersQueries.getUsersQuery()
     .then(([result]: Users[]) => res.status(200).json(result))
     .catch((error: any) => res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: error }))
