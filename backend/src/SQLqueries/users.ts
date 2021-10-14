@@ -8,7 +8,7 @@ const addUserQuery = (values: Users) => {
 }
 
 const getUsersQuery = () => {
-  return db.query(`SELECT * FROM USERS`);
+  return db.query(`SELECT * FROM USERS ORDER BY inscription_time`);
 }
 
 const getOneUserQueryById = (value: string) => {
@@ -26,9 +26,12 @@ const getOneUserQueryByEmail = (value: string) => {
 const getHashedPasswordByEmail = (value: string) => {
   return db.query(`SELECT hashed_password FROM USERS WHERE email = ?`, [value]);
 }
+const getHashedPasswordByNickname = (value: string) => {
+  return db.query(`SELECT hashed_password FROM USERS WHERE nick_name = ?`, [value]);
+}
 
 const getSelectedUsersQuery = (first: number, last: number) => {
-  return db.query(`SELECT * FROM USERS LIMIT ?, ?`, [first, last]);
+  return db.query(`SELECT * FROM USERS ORDER BY inscription_time LIMIT ?, ?`, [first, last]);
 }
 
 const updateUserQuery = (id: string, values: any) => {
@@ -46,6 +49,7 @@ module.exports = {
   getOneUserQueryByEmail,
   getOneUserQueryByNickname,
   getHashedPasswordByEmail,
+  getHashedPasswordByNickname,
   getSelectedUsersQuery,
   updateUserQuery,
   deleteUserQuery,
