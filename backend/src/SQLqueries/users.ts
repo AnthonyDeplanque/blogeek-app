@@ -8,7 +8,7 @@ const addUserQuery = (values: Users) => {
 }
 
 const getUsersQuery = () => {
-  return db.query(`SELECT * FROM USERS`);
+  return db.query(`SELECT * FROM USERS ORDER BY inscription_time`);
 }
 
 const getOneUserQueryById = (value: string) => {

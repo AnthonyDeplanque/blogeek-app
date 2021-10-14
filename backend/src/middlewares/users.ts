@@ -1,14 +1,12 @@
-import { required } from "joi";
-
 const Joi = require('joi');
 
 const postUserValidationObject = {
-  id: Joi.string().max(64).required(),
+  id: Joi.string().max(20).required(),
   first_name: Joi.string().max(50),
   last_name: Joi.string().max(50),
   nick_name: Joi.string().max(50).required(),
   email: Joi.string().email({ minDomainSegments: 2 }).max(150).required(),
-  hashed_password: Joi.string().max(64).required(),
+  hashed_password: Joi.string().max(100).required(),
   inscription_time: Joi.number().required(),
   avatar: Joi.string().max(250).allow(null, ''),
   biography: Joi.string().max(250).allow(null, ''),
@@ -19,19 +17,19 @@ const updateUserValidationObject = {
   last_name: Joi.string().max(50),
   nick_name: Joi.string().max(50),
   email: Joi.string().email({ minDomainSegments: 2 }).max(150),
-  hashed_password: Joi.string().max(64),
+  hashed_password: Joi.string().max(100),
   inscription_time: Joi.number(),
   avatar: Joi.string().max(250).allow(null, ''),
   biography: Joi.string().max(250).allow(null, ''),
 }
 
 const updateUserPasswordValidationObject = {
-  hashed_password: Joi.string().max(64).required(),
+  hashed_password: Joi.string().max(100).required(),
 }
 
 const loginUserValidationObject = {
   email: Joi.string().email({ minDomainSegments: 2 }).max(150).required(),
-  hashed_password: Joi.string().max(64).required(),
+  hashed_password: Joi.string().max(100).required(),
 }
 
 module.exports = { postUserValidationObject, updateUserPasswordValidationObject, updateUserValidationObject, loginUserValidationObject }
