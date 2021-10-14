@@ -100,10 +100,42 @@ const loginUser = (req: express.Request, res: express.Response) => {
   }
 }
 
+const getUserProfile = (req: express.Request, res: express.Response) => {
+  const { token } = req.body;
+  const timeStamp = Math.floor(Date.now() / 1000);
+  try
+  {
+    const decodedToken = JWTServices.decodeToken(token);
+    const { data, exp } = decodedToken;
+    if (timeStamp < exp)
+    {
+      usersQueries.getOneUserQueryByEmail(data)
+        .then(([[results]]: any) => {
+          res.status(200).json({ ...results, expirationTimestamp: exp * 1000, message: ServerResponses.REQUEST_OK });
+        })
+        .catch((error: any) => {
+          console.error(error);
+          res.status(204).json({ message: ServerResponses.NOT_FOUND, detail: ServerDetails.ERROR_RETRIEVING });
+        });
+    } else
+    {
+      res.status(200).json({ message: ServerResponses.ACCESS_DENIED, detail: ServerDetails.RECONNECTION_NEEDED });
+    }
+  } catch (error)
+  {
+    console.error(error);
+    res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.INVALID_TOKEN });
+  }
+}
+
+
+
+
+
 const getAllUsers = (req: express.Request, res: express.Response) => {
   usersQueries.getUsersQuery()
     .then(([result]: Users[]) => res.status(200).json(result))
     .catch((error: any) => res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: error }))
 }
 
-module.exports = { getAllUsers, postUser, loginUser }
+module.exports = { getAllUsers, postUser, loginUser, getUserProfile }
