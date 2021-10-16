@@ -1,4 +1,4 @@
-const Joi = require('joi');
+import * as Joi from 'joi';
 
 const postUserValidationObject = {
   id: Joi.string().max(20).required(),

@@ -1,3 +1,5 @@
+import { Role } from "./Role";
+
 export interface Users {
   id: string;
   first_name?: string;
@@ -8,4 +10,8 @@ export interface Users {
   inscription_time: number;
   avatar?: string;
   biography?: string;
+}
+
+export interface UsersWithRole extends Users {
+  role: [Role]
 }
