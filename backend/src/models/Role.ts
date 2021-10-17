@@ -1,9 +1,9 @@
-export interface Role {
+export interface Roles {
   id: string;
   name: string;
 }
 
-export enum ROLES {
+export enum ROLE {
   ROLE_USER = "ROLE_USER",
   ROLE_MODERATOR = "ROLE_MODERATOR",
   ROLE_CREATOR = 'ROLE_CREATOR',

@@ -2,9 +2,9 @@ import * as express from 'express';
 import * as Joi from 'joi';
 import * as argon2 from 'argon2';
 import { ServerDetails, ServerResponses } from '../config/serverResponses';
-import { Users, UsersWithRole } from "../models/Users";
+import { Users } from "../models/Users";
 import { generatedId } from '../services/idGenerator';
-import { Role, ROLES } from '../models/Role';
+import { Roles, ROLE } from '../models/Role';
 
 const usersQueries = require('../SQLqueries/users');
 const rolesToUsersQueries = require('../SQLqueries/rolesToUsers');
@@ -46,10 +46,10 @@ const postUser = async (req: express.Request, res: express.Response) => {
           } else
           {
             const newUser = { id, nick_name, first_name, last_name, email, hashed_password, inscription_time, avatar, biography }
-            rolesQueries.getOneRoleQueryByName(ROLES.ROLE_USER).then(([[results]]: [[Role]]) => {
+            rolesQueries.getOneRoleQueryByName(ROLE.ROLE_USER).then(([[results]]: [[Roles]]) => {
               const role = results;
-              usersQueries.addUserQuery(newUser).then(([result]: any) => {
-                rolesToUsersQueries.addRoleToUserQuery({ id: generatedId(), id_user: id, id_role: role.id }).then(([[results]]: any) => {
+              usersQueries.addUserQuery(newUser).then(([result]: [Users]) => {
+                rolesToUsersQueries.addRoleToUserQuery({ id: generatedId(), id_user: id, id_role: role.id }).then(([[results]]: [[Roles]]) => {
                   const name = role.name;
                   res.status(201).json({ ...newUser, role: [name], roleToUser: results, response: { message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK } })
                 }).catch((error: unknown) => {
@@ -97,7 +97,7 @@ const loginUser = (req: express.Request, res: express.Response) => {
               usersQueries.getOneUserQueryByNickname(nick_name).then(([[results]]: any) => {
                 const token = JWTServices.createToken(results.email);
                 rolesToUsersQueries.getRolesForUserQuery(results.id).then(([roles]: any[]) => {
-                  const names: string[] = roles.map((role: any) => role.name);
+                  const names: string[] = roles.map((role: Roles) => role.name);
                   res.status(200).json({
                     ...results,
                     roles: names,
@@ -140,9 +140,9 @@ const getUserProfile = (req: express.Request, res: express.Response) => {
     if (timeStamp < exp)
     {
       usersQueries.getOneUserQueryByEmail(data)
-        .then(([[results]]: any) => {
-          rolesToUsersQueries.getRolesForUserQuery(results.id).then(([rolesList]: [any]) => {
-            const roles: [] = rolesList.map((role: Role) => role.name);
+        .then(([[results]]: [[Users]]) => {
+          rolesToUsersQueries.getRolesForUserQuery(results.id).then(([rolesList]: any[]) => {
+            const roles: string[] = rolesList.map((role: Roles) => role.name);
             res.status(200).json({ ...results, roles, expirationTimestamp: exp * 1000, message: ServerResponses.REQUEST_OK });
           }).catch((error: unknown) => {
             console.error(error)
@@ -174,7 +174,7 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
   {
     usersQueries.getOneUserQueryByNickname(nickname).then(([[result]]: [[Users]]) => {
       rolesToUsersQueries.getRolesForUserQuery(result.id).then(([roleList]: any[]) => {
-        const roles: string[] = roleList.map((role: Role) => role.name);
+        const roles: string[] = roleList.map((role: Roles) => role.name);
         res.status(200).json({ result, roles });
       }).catch((error: unknown) => { res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: error }); })
     }).catch((_error: unknown) => {
@@ -185,7 +185,7 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
   {
     usersQueries.getOneUserQueryByEmail(email).then(([[result]]: [[Users]]) => {
       rolesToUsersQueries.getRolesForUserQuery(result.id).then(([roleList]: any[]) => {
-        const roles: string[] = roleList.map((role: Role) => role.name);
+        const roles: string[] = roleList.map((role: Roles) => role.name);
         res.status(200).json({ result, roles });
       }).catch((error: unknown) => { res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: error }); })
     }).catch((_error: unknown) => {
@@ -197,13 +197,12 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
     usersQueries.getSelectedUsersQuery(+first, +last)
       .then(([results]: any[]) => {
         const promises = results.map(async (user: any) => {
-          user.role =
-            await rolesToUsersQueries.getRolesForUserQuery(user.id).then(([role]: any) => {
-              const roles = role.map((r: any) => {
-                const { name } = r; return name;
-              })
-              return roles;
+          user.role = await rolesToUsersQueries.getRolesForUserQuery(user.id).then(([role]: any) => {
+            const roles = role.map((r: any) => {
+              const { name } = r; return name;
             })
+            return roles;
+          })
           return user;
         })
         Promise.all(promises).then((result: any) => res.status(200).json(result));
@@ -217,8 +216,8 @@ const getAllUsers = async (req: express.Request, res: express.Response) => {
         const promises = results.map(async (user: any) => {
           user.role =
             await rolesToUsersQueries.getRolesForUserQuery(user.id).then(([role]: any) => {
-              const roles = role.map((r: any) => {
-                const { name } = r; return name;
+              const roles = role.map((roleName: Roles) => {
+                const { name } = roleName; return name;
               })
               return roles;
             })
@@ -241,7 +240,7 @@ const getOneUserById = (req: express.Request, res: express.Response) => {
       if (result)
       {
         rolesToUsersQueries.getRolesForUserQuery(result.id).then(([roleList]: any[]) => {
-          const roles: [] = roleList.map((role: Role) => role.name);
+          const roles: [] = roleList.map((role: Roles) => role.name);
           res.status(200).json({ result, roles });
         }).catch((error: unknown) => { res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: error }); })
       } else
@@ -314,8 +313,6 @@ const updateUserPassword = async (req: express.Request, res: express.Response) =
       })
   }
 }
-
-
 
 const deleteUser = (req: express.Request, res: express.Response) => {
   const { id } = req.params;

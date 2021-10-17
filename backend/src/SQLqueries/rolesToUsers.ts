@@ -8,6 +8,9 @@ const addRoleToUserQuery = (values: any) => {
 const removeRoleToUserQuery = (id: string) => {
   return db.query(`DELETE FROM USER_HAS_ROLES WHERE id=?`, [id]);
 }
+const removeRoleToUserWithIdsQuery = (id_role: string, id_user: string) => {
+  return db.query(`DELETE FROM USER_HAS_ROLES WHERE id_role=? AND id_user=?`, [id_role, id_user]);
+}
 const removeRoleToUserByUseridQuery = (id: string) => {
   return db.query(`DELETE FROM USER_HAS_ROLES WHERE id_user=?`, [id]);
 }
@@ -21,4 +24,13 @@ const getIterationsForUserRolesQuery = () => {
   return db.query('SELECT * FROM USER_HAS_ROLES');
 }
 
-module.exports = { addRoleToUserQuery, removeRoleToUserQuery, removeRoleToUserByUseridQuery, getRolesForUserQuery, getUsersFromRoleQuery, getIterationsForUserRolesQuery }
+
+module.exports = {
+  addRoleToUserQuery,
+  removeRoleToUserQuery,
+  removeRoleToUserWithIdsQuery,
+  removeRoleToUserByUseridQuery,
+  getRolesForUserQuery,
+  getUsersFromRoleQuery,
+  getIterationsForUserRolesQuery
+}

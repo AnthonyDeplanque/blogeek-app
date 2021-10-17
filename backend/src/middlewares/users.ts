@@ -17,7 +17,6 @@ const updateUserValidationObject = {
   last_name: Joi.string().max(50),
   nick_name: Joi.string().max(50),
   email: Joi.string().email({ minDomainSegments: 2 }).max(150),
-  inscription_time: Joi.number(),
   avatar: Joi.string().max(250).allow(null, ''),
   biography: Joi.string().max(250).allow(null, ''),
 }
