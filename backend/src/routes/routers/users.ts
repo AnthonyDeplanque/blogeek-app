@@ -4,8 +4,9 @@ import {
   ROLE_FOR_USER_API_ROUTE,
   TOKEN_ROUTE
 } from "../../config/apiRoutes";
+import * as express from 'express';
 
-const express = require('express');
+
 const { getAllUsers, postUser, loginUser, getUserProfile, getOneUserById, updateUser, deleteUser, updateUserPassword } = require('../../controllers/users');
 const { addRoleToUser, removeRoleToUser } = require('../../controllers/roles');
 const route = express.Router();
