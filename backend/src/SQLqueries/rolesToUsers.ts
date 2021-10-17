@@ -1,6 +1,7 @@
-const connectionDB = require('../db-config')
+import * as mysql2 from 'mysql2';
 
-const db = connectionDB.promise();
+const connection = require('../db-config');
+const db: mysql2.Connection = connection.promise();
 
 const addRoleToUserQuery = (values: any) => {
   return db.query(`INSERT INTO USER_HAS_ROLES SET ?`, [values]);

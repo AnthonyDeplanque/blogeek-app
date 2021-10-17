@@ -1,7 +1,8 @@
 import { Users } from "../models/Users";
-const connection = require('../db-config')
+import * as mysql2 from 'mysql2';
 
-const db = connection.promise();
+const connection = require('../db-config');
+const db: mysql2.Connection = connection.promise();
 
 const addUserQuery = (values: Users) => {
   return db.query(`INSERT INTO USERS SET ? `, [values]);

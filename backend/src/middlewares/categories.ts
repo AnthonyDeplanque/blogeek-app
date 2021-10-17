@@ -5,7 +5,7 @@ const postCategoryValidationObject = {
   title: Joi.string().max(255).required(),
 }
 const updateCategoryValidationObject = {
-  title: Joi.string().max(255).required(),
+  title: Joi.string().max(255),
 }
 const postSubCategoryValidationObject = {
   id: Joi.string().max(20).required(),
@@ -13,7 +13,7 @@ const postSubCategoryValidationObject = {
   title: Joi.string().max(255).required(),
 }
 const updateSubCategoryValidationObject = {
-  title: Joi.string().max(255).required(),
+  title: Joi.string().max(255),
 }
 
 module.exports = { postCategoryValidationObject, postSubCategoryValidationObject, updateCategoryValidationObject, updateSubCategoryValidationObject };

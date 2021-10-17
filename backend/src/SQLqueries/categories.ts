@@ -1,5 +1,5 @@
 import * as mysql2 from 'mysql2';
-import { Categories, SubCategories } from '../models/categories';
+import { Categories, SubCategories } from '../models/Categories';
 
 const connection = require('../db-config');
 const db: mysql2.Connection = connection.promise();
@@ -47,6 +47,10 @@ const deleteSubCategoriesFromIdCategoryQuery = (id: string) => {
   return db.query('DELETE FROM SUBCATEGORIES WHERE id_category=?', [id]);
 }
 
+const deleteCategoryForArticleQuery = (id: string) => {
+  return db.query('DELETE FROM ARTICLE_HAS_CATEGORIES WHERE id_subcategory = ?', [id])
+}
+
 module.exports = {
   getCategoriesQuery,
   getOneCategoryQuery,
@@ -61,5 +65,6 @@ module.exports = {
   updateOneSubCategoryQuery,
   deleteCategoryQuery,
   deleteSubCategoriesFromIdCategoryQuery,
-  deleteSubCategoryQuery
+  deleteSubCategoryQuery,
+  deleteCategoryForArticleQuery
 }
