@@ -1,8 +1,7 @@
-import { Role } from "../models/Role";
+import * as mysql2 from 'mysql2';
 
-const connectionDB = require('../db-config')
-
-const db = connectionDB.promise();
+const connection = require('../db-config')
+const db: mysql2.Connection = connection.promise();
 
 const getRolesQuery = () => {
   return db.query(`SELECT * FROM ROLES`);

@@ -2,8 +2,8 @@ const JWT = require('jsonwebtoken');
 const expressJWT = require("express-jwt");
 
 const createToken = (payload: string) => {
-  const dateNowForToken = Date.now() / 1000;
-  const expiration = Math.floor(dateNowForToken + 60 * 60 * 24);
+  const dateNowForToken: number = Date.now() / 1000;
+  const expiration: number = Math.floor(dateNowForToken + 60 * 60 * 24);
   const token = JWT.sign(
     {
       data: payload,

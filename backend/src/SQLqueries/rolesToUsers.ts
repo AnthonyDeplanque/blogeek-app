@@ -1,12 +1,16 @@
-const connectionDB = require('../db-config')
+import * as mysql2 from 'mysql2';
 
-const db = connectionDB.promise();
+const connection = require('../db-config');
+const db: mysql2.Connection = connection.promise();
 
 const addRoleToUserQuery = (values: any) => {
   return db.query(`INSERT INTO USER_HAS_ROLES SET ?`, [values]);
 }
 const removeRoleToUserQuery = (id: string) => {
   return db.query(`DELETE FROM USER_HAS_ROLES WHERE id=?`, [id]);
+}
+const removeRoleToUserWithIdsQuery = (id_role: string, id_user: string) => {
+  return db.query(`DELETE FROM USER_HAS_ROLES WHERE id_role=? AND id_user=?`, [id_role, id_user]);
 }
 const removeRoleToUserByUseridQuery = (id: string) => {
   return db.query(`DELETE FROM USER_HAS_ROLES WHERE id_user=?`, [id]);
@@ -21,4 +25,13 @@ const getIterationsForUserRolesQuery = () => {
   return db.query('SELECT * FROM USER_HAS_ROLES');
 }
 
-module.exports = { addRoleToUserQuery, removeRoleToUserQuery, removeRoleToUserByUseridQuery, getRolesForUserQuery, getUsersFromRoleQuery, getIterationsForUserRolesQuery }
+
+module.exports = {
+  addRoleToUserQuery,
+  removeRoleToUserQuery,
+  removeRoleToUserWithIdsQuery,
+  removeRoleToUserByUseridQuery,
+  getRolesForUserQuery,
+  getUsersFromRoleQuery,
+  getIterationsForUserRolesQuery
+}
