@@ -1,3 +1,5 @@
+import { Reactions } from "./Reaction";
+
 export interface Articles {
   id: string,
   id_user: string,
@@ -5,4 +7,5 @@ export interface Articles {
   subtitle: string,
   content: string,
   date_of_write: number,
+  reaction?: Reactions[],
 }

@@ -8,8 +8,16 @@ const getArticlesQuery = () => {
   return db.query('SELECT * FROM ARTICLES ORDER BY date_of_write');
 }
 
+const getSelectedArticlesQuery = (first: string, last: string) => {
+  return db.query(`SELECT * FROM ARTICLES ORDER BY date_of_write LIMIT ?, ?`, [first, last]);
+}
+
 const getOneArticleQuery = (id: string) => {
   return db.query('SELECT * FROM ARTICLES WHERE id = ? ', [id]);
+}
+
+const getOneArticleByTitleQuery = (title: string) => {
+  return db.query('SELECT * FROM ARTICLES WHERE title = %?% ', [title]);
 }
 
 const getAllArticlesFromAnUserQuery = (id: string) => {
@@ -49,6 +57,8 @@ module.exports = {
   getAllArticlesFromAnUserQuery,
   getArticlesQuery,
   getOneArticleQuery,
+  getOneArticleByTitleQuery,
+  getSelectedArticlesQuery,
   postArticleQuery,
   postCategoryForArticleQuery,
   updateArticleQuery,
