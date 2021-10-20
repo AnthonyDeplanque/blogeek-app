@@ -1,3 +1,8 @@
+import { Articles } from "./Articles";
+import { Comments } from "./comments";
+import { ArticleReactions } from "./Reaction";
+import { ROLE } from "./Role";
+
 export interface Users {
   id: string;
   first_name?: string;
@@ -8,5 +13,8 @@ export interface Users {
   inscription_time: number;
   avatar?: string;
   biography?: string;
-  role?: string[]
+  role?: ROLE[];
+  articles?: Articles[];
+  articles_reactions?: ArticleReactions[];
+  comments?: Comments[];
 }
