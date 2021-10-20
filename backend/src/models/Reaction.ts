@@ -1,8 +1,3 @@
-export interface Reactions {
-  id: string,
-  name: string,
-}
-
 export enum REACTIONS {
   REACTION_PLUS = "REACTION_PLUS",
   REACTION_MINUS = "REACTION_MINUS",
@@ -10,4 +5,21 @@ export enum REACTIONS {
   REACTION_FROWN = "REACTION_FROWN",
   REACTION_LOVE = "REACTION_LOVE",
   REACTION_ANGRY = "REACTION_ANGRY",
+}
+
+export interface Reactions {
+  id: string,
+  name: REACTIONS,
+}
+
+export interface UserReactions extends Reactions {
+  id_user?: string,
+}
+
+export interface ArticleReactions extends Reactions {
+  id_article?: string,
+}
+
+export interface CommentReactions extends Reactions {
+  id_comment?: string,
 }

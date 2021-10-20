@@ -12,14 +12,14 @@ const { addRoleToUser, removeRoleToUser } = require('../../controllers/roles');
 const route = express.Router();
 
 route.get("/", getAllUsers);
-route.post('/', postUser);
-route.post(AUTHENTICATION_ROUTE, loginUser);
-route.post(TOKEN_ROUTE, getUserProfile);
-route.post(ROLE_FOR_USER_API_ROUTE, addRoleToUser);
 route.get("/:id", getOneUserById);
+route.post('/', postUser);
 route.put('/:id', updateUser);
-route.put(`${PASSWORD_ROUTE}/:id`, updateUserPassword);
 route.delete('/:id', deleteUser);
+route.put(`${PASSWORD_ROUTE}/:id`, updateUserPassword);
+route.post(TOKEN_ROUTE, getUserProfile);
+route.post(AUTHENTICATION_ROUTE, loginUser);
+route.post(`${ROLE_FOR_USER_API_ROUTE}/:id`, addRoleToUser);
 route.delete(`${ROLE_FOR_USER_API_ROUTE}/:id`, removeRoleToUser);
 
 module.exports = route;

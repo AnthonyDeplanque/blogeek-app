@@ -84,6 +84,99 @@ const getAllArticles = (req: express.Request, res: express.Response) => {
       detail: ServerDetails.ERROR_RETRIEVING
     })
   }
+};
+
+const getOneArticle = (req: express.Request, res: express.Response) => {
+  const { id } = req.params;
+  articlesQueries.getOneArticleQuery(id).then(([[result]]: [[Articles]]) => {
+    res.status(200).json({ result });
+  }).catch((error: unknown) => {
+    console.error(error);
+    res.status(500).json({
+      message: ServerResponses.SERVER_ERROR,
+      detail: ServerDetails.ERROR_RETRIEVING
+    })
+  })
 }
 
-module.exports = { getAllArticles };
+const postArticle = (req: express.Request, res: express.Response) => {
+  const id = generatedId();
+  const { id_user, title, subtitle, content } = req.body;
+  const date_of_write = Date.now();
+  const { error } = Joi.object(articlesMiddlewares.postArticleValidationObject).validate({ id, id_user, title, subtitle, content, date_of_write }, { abortEarly: false });
+  if (error)
+  {
+    res.status(422).json({ validationError: error.details });
+  } else
+  {
+    const newArticle = { id, id_user, title, subtitle, content, date_of_write };
+    articlesQueries.postArticleQuery(newArticle).then(([[result]]: any) => {
+      res.status(401).json({ message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK, newArticle, result });
+    }).catch((error: unknown) => {
+      console.error(error);
+      res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_CREATION });
+    })
+  }
+}
+
+const updateArticle = (req: express.Request, res: express.Response) => {
+  const { id } = req.params;
+  const { error } = Joi.object(articlesMiddlewares.updateArticleValidationObject).validate(req.body, { abortEarly: false });
+  if (error)
+  {
+    res.status(422).json({ validationError: error.details });
+  } else
+  {
+    articlesQueries.getOneArticleQuery(id).then(([[result]]: [[Articles]]) => {
+      if (result)
+      {
+        articlesQueries.updateArticleQuery(req.body).then(([[result]]: any) => {
+          res.status(403).json({
+            message: ServerResponses.REQUEST_OK,
+            detail: ServerDetails.UPDATE_OK,
+            result
+          })
+        }).catch((error: unknown) => {
+          console.error(error);
+          res.status(500).json({
+            message: ServerResponses.SERVER_ERROR,
+            detail: ServerDetails.ERROR_UPDATE,
+          })
+        })
+      }
+    }).catch((error: unknown) => {
+      console.error(error);
+      res.status(500).json({
+        message: ServerResponses.SERVER_ERROR,
+        detail: ServerDetails.ERROR_RETRIEVING
+      });
+    })
+  }
+}
+
+const deleteArticle = (req: express.Request, res: express.Response) => {
+  const { id } = req.params;
+  articlesQueries.deleteArticleQuery(id).then(([result]: any) => {
+    if (result.affectedRows)
+    {
+      res.status(200).json({
+        message: ServerResponses.REQUEST_OK,
+        detail: ServerDetails.DELETE_OK
+      })
+    } else
+    {
+      res.status(404).json({
+        message: ServerResponses.NOT_FOUND,
+        detail: ServerDetails.NO_DATA
+      });
+    }
+  }).catch((error: unknown) => {
+    console.error(error);
+    res.status(500).json({
+      message: ServerResponses.SERVER_ERROR,
+      detail: ServerDetails.ERROR_DELETE
+    });
+  });
+}
+
+module.exports = { getAllArticles, getOneArticle, postArticle, updateArticle, deleteArticle };
