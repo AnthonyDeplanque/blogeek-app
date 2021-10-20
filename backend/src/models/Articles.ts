@@ -1,4 +1,6 @@
-import { Reactions } from "./Reaction";
+import { SubCategories } from "./Categories";
+import { Comments } from "./comments";
+import { UserReactions } from "./Reaction";
 
 export interface Articles {
   id: string,
@@ -7,5 +9,7 @@ export interface Articles {
   subtitle: string,
   content: string,
   date_of_write: number,
-  reaction?: Reactions[],
+  subcategories?: SubCategories[],
+  reaction?: UserReactions[],
+  comments?: Comments[];
 }

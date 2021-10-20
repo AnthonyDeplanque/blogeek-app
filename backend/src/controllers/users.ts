@@ -48,7 +48,7 @@ const postUser = async (req: express.Request, res: express.Response) => {
             const newUser = { id, nick_name, first_name, last_name, email, hashed_password, inscription_time, avatar, biography }
             rolesQueries.getOneRoleQueryByName(ROLE.ROLE_USER).then(([[results]]: [[Roles]]) => {
               const role = results;
-              usersQueries.addUserQuery(newUser).then(([result]: [Users]) => {
+              usersQueries.addUserQuery(newUser).then(([_result]: [Users]) => {
                 rolesToUsersQueries.addRoleToUserQuery({ id: generatedId(), id_user: id, id_role: role.id }).then(([[results]]: [[Roles]]) => {
                   const name = role.name;
                   res.status(201).json({ ...newUser, role: [name], roleToUser: results, response: { message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK } })
@@ -298,7 +298,7 @@ const updateUserPassword = async (req: express.Request, res: express.Response) =
         if (result)
         {
           usersQueries.updateUserQuery(id, { hashed_password })
-            .then(([result]: any) => {
+            .then(([_result]: any) => {
               res.status(201).json({ message: ServerResponses.REQUEST_OK, detail: ServerDetails.UPDATE_OK });
             }).catch((error: unknown) => {
               res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: error });

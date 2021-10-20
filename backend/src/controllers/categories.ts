@@ -7,9 +7,9 @@ import { generatedId } from '../services/idGenerator';
 const categoriesMiddlewares = require('../middlewares/categories');
 const categoriesQueries = require('../SQLqueries/categories');
 
-const getCategories = (req: express.Request, res: express.Response) => {
+const getCategories = (_req: express.Request, res: express.Response) => {
   categoriesQueries.getCategoriesQuery().then(([results]: any[]) => {
-    const categories = results.map(async (cat: Categories, index: number) => {
+    const categories = results.map(async (cat: Categories) => {
       const subCat = await categoriesQueries.getSubCategoriesFromIdCategoryQuery(cat.id).then(([results]: any[]) => {
         const subCategories: string[] = results.map((sub: SubCategories) => sub.title);
         return subCategories;
@@ -18,12 +18,12 @@ const getCategories = (req: express.Request, res: express.Response) => {
       return cat;
     })
     Promise.all(categories).then((result) => {
-      res.status(200).json(result)
+      res.status(200).json(result);
     }
     )
   })
     .catch((error: unknown) => {
-
+      console.error(error);
       res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_RETRIEVING });
     })
 }
@@ -47,7 +47,7 @@ const getOneCategory = (req: express.Request, res: express.Response) => {
     })
 }
 
-const getSubCategories = (req: express.Request, res: express.Response) => {
+const getSubCategories = (_req: express.Request, res: express.Response) => {
   categoriesQueries.getSubCategoriesQuery().then(([results]: any) => {
     res.status(200).json(results);
   })
@@ -73,6 +73,7 @@ const getOneSubCategory = (req: express.Request, res: express.Response) => {
     })
   })
     .catch((error: unknown) => {
+      console.error(error);
       res.status(500).json({
         message: ServerResponses.SERVER_ERROR,
         detail: ServerDetails.ERROR_RETRIEVING
@@ -261,10 +262,10 @@ const deleteSubCategory = async (req: express.Request, res: express.Response) =>
         {
           articles_deleted = results.affectedRows;
           articles_deleted;
-          res.status(202).json({ message: ServerResponses.REQUEST_OK, detail: ServerDetails.DELETE_OK });
+          res.status(202).json({ message: ServerResponses.REQUEST_OK, detail: ServerDetails.DELETE_OK, subcategories_deleted });
         } else
         {
-          res.status(202).json({ message: ServerResponses.REQUEST_OK, detail: ServerDetails.DELETE_OK });
+          res.status(202).json({ message: ServerResponses.REQUEST_OK, detail: ServerDetails.DELETE_OK, subcategories_deleted });
         }
       }).catch((error: unknown) => { console.error(error); res.status(500).send(error) })
     }
