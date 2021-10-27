@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as Joi from 'joi';
 import * as argon2 from 'argon2';
-import { generatedId } from '../services/idGenerator';
+import { generateId } from '../services/idGenerator';
 import { ServerDetails, ServerResponses } from '../config/serverResponses';
 import { Users } from "../models/Users";
 import { Roles, ROLE } from '../models/Role';
@@ -22,7 +22,7 @@ const postUser = async (req: express.Request, res: express.Response) => {
       detail: ServerDetails.NO_PASSWORD
     });
   }
-  const id = generatedId();
+  const id = generateId();
   const hashed_password = await argon2.hash(password);
   const inscription_time = Date.now();
 
@@ -49,7 +49,7 @@ const postUser = async (req: express.Request, res: express.Response) => {
             rolesQueries.getOneRoleQueryByName(ROLE.ROLE_USER).then(([[results]]: [[Roles]]) => {
               const role = results;
               usersQueries.addUserQuery(newUser).then(([_result]: [Users]) => {
-                rolesToUsersQueries.addRoleToUserQuery({ id: generatedId(), id_user: id, id_role: role.id }).then(([[results]]: [[Roles]]) => {
+                rolesToUsersQueries.addRoleToUserQuery({ id: generateId(), id_user: id, id_role: role.id }).then(([[results]]: [[Roles]]) => {
                   const name = role.name;
                   res.status(201).json({ ...newUser, role: [name], roleToUser: results, response: { message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK } })
                 }).catch((error: unknown) => {

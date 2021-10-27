@@ -3,7 +3,7 @@ import * as express from 'express';
 import { ServerDetails, ServerResponses } from '../config/serverResponses';
 import { ROLE, Roles } from '../models/Role';
 import { Users } from '../models/Users';
-import { generatedId } from '../services/idGenerator';
+import { generateId } from '../services/idGenerator';
 
 const usersQueries = require('../SQLqueries/users');
 const rolesToUsersQueries = require('../SQLqueries/rolesToUsers');
@@ -26,7 +26,7 @@ const addRoleToUser = async (req: express.Request, res: express.Response) => {
           const userIdListWithFinalRole = users.map((user: Users) => user.id);
           if (!userIdListWithFinalRole.includes(finalRole.id))
           {
-            await rolesToUsersQueries.addRoleToUserQuery({ id: generatedId(), id_user: id, id_role: finalRole.id }).then(([[result]]: any) => {
+            await rolesToUsersQueries.addRoleToUserQuery({ id: generateId(), id_user: id, id_role: finalRole.id }).then(([[result]]: any) => {
               res.status(201).json({ user: finalUser, role: finalRole, result: result, response: { message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK } })
             }).catch((error: unknown) => {
               console.error(error);

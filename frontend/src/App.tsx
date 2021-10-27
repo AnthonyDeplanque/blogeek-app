@@ -1,11 +1,10 @@
 import React from 'react';
-import { Box } from '@mui/system';
-import { Typography } from '@mui/material';
+import ArticlesList from './components/articles/ArticlesList';
 interface props { };
 
 const App: React.FC<props> = () => {
   return (
-    <Box><Typography>Hello World</Typography></Box>
+    <ArticlesList />
   );
 }
 

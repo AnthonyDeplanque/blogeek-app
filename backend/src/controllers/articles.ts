@@ -1,7 +1,7 @@
 import * as Joi from 'joi';
 import * as express from "express";
 import { ServerDetails, ServerResponses } from '../config/serverResponses';
-import { generatedId } from '../services/idGenerator';
+import { generateId } from '../services/idGenerator';
 import { Articles } from '../models/Articles';
 
 const articlesQueries = require('../SQLqueries/articles');
@@ -100,7 +100,7 @@ const getOneArticle = (req: express.Request, res: express.Response) => {
 }
 
 const postArticle = (req: express.Request, res: express.Response) => {
-  const id = generatedId();
+  const id = generateId();
   const { id_user, title, subtitle, content } = req.body;
   const date_of_write = Date.now();
   const { error } = Joi.object(articlesMiddlewares.postArticleValidationObject).validate({ id, id_user, title, subtitle, content, date_of_write }, { abortEarly: false });
@@ -120,7 +120,7 @@ const postArticle = (req: express.Request, res: express.Response) => {
 }
 
 const postASubategoryForArticle = (req: express.Request, res: express.Response) => {
-  const id = generatedId();
+  const id = generateId();
   const { id_article, id_subcategory } = req.body;
   const categoryForArticle = { id, id_article, id_subcategory }
   articlesQueries.postASubategoryForArticle(categoryForArticle).then(([[results]]: any) => {
