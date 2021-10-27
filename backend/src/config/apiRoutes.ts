@@ -4,6 +4,7 @@ const SUBCATEGORIES_ROUTE = '/subcategories';
 const ARTICLES_ROUTE = '/articles';
 const CATEGORIES_FOR_ARTICLE_ROUTE = '/catarticle';
 
+export const FILE_STORAGE_ROUTE = '/file-storage';
 export const BASE_API_ROUTE = '/api';
 export const AUTHENTICATION_ROUTE = '/auth';
 export const TOKEN_ROUTE = '/token';

@@ -4,6 +4,7 @@ const path = require('path');
 
 
 
+import { FILE_STORAGE_ROUTE } from './config/apiRoutes';
 import { router } from './routes/index';
 const express = require('express');
 const app = express();
@@ -15,7 +16,7 @@ app.set("view engine", "ejs");
 
 app.use(cors());
 app.use(express.json());
-app.use('/file-storage', express.static('file-storage'));
+app.use(FILE_STORAGE_ROUTE, express.static('file-storage'));
 
 router(app);
 

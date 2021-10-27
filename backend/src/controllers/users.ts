@@ -1,9 +1,9 @@
 import * as express from 'express';
 import * as Joi from 'joi';
 import * as argon2 from 'argon2';
+import { generatedId } from '../services/idGenerator';
 import { ServerDetails, ServerResponses } from '../config/serverResponses';
 import { Users } from "../models/Users";
-import { generatedId } from '../services/idGenerator';
 import { Roles, ROLE } from '../models/Role';
 
 const usersQueries = require('../SQLqueries/users');

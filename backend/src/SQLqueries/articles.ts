@@ -40,6 +40,10 @@ const postCategoryForArticleQuery = (values: any) => {
   return db.query('INSERT INTO ARTICLE_HAS_CATEGORIES SET ?', [values]);
 }
 
+const updateCategoryForArticleQuery = (id: string, values: Articles) => {
+  return db.query('UPDATE ARTICLES_HAS_CATEGORIES SET ? WHERE id=?', [values, id]);
+}
+
 const updateArticleQuery = (id: string, values: Articles) => {
   return db.query('UPDATE ARTICLES SET ? WHERE id=?', [values, id]);
 }
@@ -62,6 +66,7 @@ module.exports = {
   postArticleQuery,
   postCategoryForArticleQuery,
   updateArticleQuery,
+  updateCategoryForArticleQuery,
   deleteArticleQuery,
   deleteCategoryForArticleQuery
 }

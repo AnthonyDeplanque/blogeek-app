@@ -1,6 +1,6 @@
 import { Articles } from "./Articles";
 import { Comments } from "./comments";
-import { ArticleReactions } from "./Reaction";
+import { ArticleReactions, CommentReactions } from "./Reaction";
 import { ROLE } from "./Role";
 
 export interface Users {
@@ -17,4 +17,6 @@ export interface Users {
   articles?: Articles[];
   articles_reactions?: ArticleReactions[];
   comments?: Comments[];
+  comments_reactions?: CommentReactions[];
+
 }
