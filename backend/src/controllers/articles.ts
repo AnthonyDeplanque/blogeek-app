@@ -119,6 +119,18 @@ const postArticle = (req: express.Request, res: express.Response) => {
   }
 }
 
+const postASubategoryForArticle = (req: express.Request, res: express.Response) => {
+  const id = generatedId();
+  const { id_article, id_subcategory } = req.body;
+  const categoryForArticle = { id, id_article, id_subcategory }
+  articlesQueries.postASubategoryForArticle(categoryForArticle).then(([[results]]: any) => {
+    res.status(401).json({ message: ServerResponses.REQUEST_OK, detail: ServerDetails.CREATION_OK, categoryForArticle, results });
+  }).catch((error: unknown) => {
+    console.error(error);
+    res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: ServerDetails.ERROR_CREATION });
+  })
+}
+
 const updateArticle = (req: express.Request, res: express.Response) => {
   const { id } = req.params;
   const { error } = Joi.object(articlesMiddlewares.updateArticleValidationObject).validate(req.body, { abortEarly: false });
@@ -179,4 +191,4 @@ const deleteArticle = (req: express.Request, res: express.Response) => {
   });
 }
 
-module.exports = { getAllArticles, getOneArticle, postArticle, updateArticle, deleteArticle };
+module.exports = { getAllArticles, getOneArticle, postArticle, postASubategoryForArticle, updateArticle, deleteArticle };

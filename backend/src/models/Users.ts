@@ -1,6 +1,6 @@
 import { Articles } from "./Articles";
-import { Comments } from "./comments";
-import { ArticleReactions, CommentReactions } from "./Reaction";
+import { Comments } from "./interactions/comments";
+import { ArticleReactions, CommentReactions } from "./interactions/Reaction";
 import { ROLE } from "./Role";
 
 export interface Users {

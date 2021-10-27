@@ -33,13 +33,13 @@ const postUser = async (req: express.Request, res: express.Response) => {
     res.status(422).json({ validationError: error.details });
   } else
   {
-    usersQueries.getOneUserQueryByEmail(email).then(([results]: any) => {
+    usersQueries.getOneUserQueryByEmail(email).then(([results]: [Users][]) => {
       if (results.length)
       {
         res.status(409).json({ message: ServerResponses.CONFLICT, detail: ServerDetails.EMAIL_ALREADY_USED })
       } else
       {
-        usersQueries.getOneUserQueryByNickname(nick_name).then(([results]: any) => {
+        usersQueries.getOneUserQueryByNickname(nick_name).then(([results]: [Users][]) => {
           if (results.length)
           {
             res.status(409).json({ message: ServerResponses.CONFLICT, detail: ServerDetails.NICKNAME_ALREADY_USED })
@@ -241,7 +241,7 @@ const getOneUserById = (req: express.Request, res: express.Response) => {
       {
         rolesToUsersQueries.getRolesForUserQuery(result.id).then(([roleList]: any[]) => {
           const roles: [] = roleList.map((role: Roles) => role.name);
-          res.status(200).json({ result, roles });
+          res.status(200).json({ ...result, roles });
         }).catch((error: unknown) => { res.status(500).json({ message: ServerResponses.SERVER_ERROR, detail: error }); })
       } else
       {
