@@ -9,17 +9,17 @@ export enum REACTIONS {
 
 export interface Reactions {
   id: string,
-  name: REACTIONS,
+  name?: REACTIONS,
 }
 
 export interface UserReactions extends Reactions {
   id_user?: string,
 }
 
-export interface ArticleReactions extends Reactions {
+export interface ArticleReactions extends UserReactions {
   id_article?: string,
 }
 
-export interface CommentReactions extends Reactions {
+export interface CommentReactions extends UserReactions {
   id_comment?: string,
 }
