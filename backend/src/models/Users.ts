@@ -18,4 +18,5 @@ export interface Users {
   articles_reactions?: ArticleReactions[];
   comments?: Comments[];
   comments_reactions?: CommentReactions[];
+
 }
