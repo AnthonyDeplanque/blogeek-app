@@ -1,5 +1,5 @@
 import React from 'react';
-import ArticlesList from './components/articles/ArticlesList';
+import ArticlesList from './articles/pages/ArticlesList'
 interface props { };
 
 const App: React.FC<props> = () => {
