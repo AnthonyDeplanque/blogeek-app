@@ -2,7 +2,7 @@ import ArticlesState from "../models/articleState";
 import { ArticlesActionsType, GET_ARTICLES_SUCCESS, GET_ARTICLES_FAILURE } from "./articlesActions";
 
 const defaultState: ArticlesState | null = {
-  data: null
+  data: undefined
 }
 
 export const articlesReducer = (state: ArticlesState = defaultState, action: ArticlesActionsType): ArticlesState => {
@@ -16,6 +16,6 @@ export const articlesReducer = (state: ArticlesState = defaultState, action: Art
     case GET_ARTICLES_FAILURE:
       return state;
     default:
-      return state
+      return state;
   }
 }

@@ -27,7 +27,7 @@ export const articlesActions = {
       type: GET_ARTICLES
     }
   }),
-  getArticlesSuccess: ((articles: Articles[]): getArticlesSuccessAction => {
+  getArticlesSuccess: ((articles: Articles[] | any): getArticlesSuccessAction => {
     return {
       type: GET_ARTICLES_SUCCESS,
       payload: articles,

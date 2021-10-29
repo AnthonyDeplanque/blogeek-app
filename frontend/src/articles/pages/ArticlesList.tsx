@@ -1,36 +1,41 @@
-import { Typography } from "@mui/material";
-import { Box } from "@mui/system";
+import AutoSizer from 'react-virtualized-auto-sizer';
+import { FixedSizeList } from 'react-window';
 import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
-
 import { useTypedSelector } from "../../redux/rootReducer";
 import RootState from "../../redux/rootState";
-
 import ArticleDisplay from "../components/ArticleDisplay";
+
 import articlesActions from "../redux/articlesActions";
+import { Box } from '@mui/system';
+import { Divider, Typography } from '@mui/material';
+import { Articles } from '../../models/Articles';
 
 
 interface ArticlesListProps { }
 const ArticlesList: React.FC<ArticlesListProps> = () => {
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+
   //@ts-ignore
   const { data } = useTypedSelector((state: RootState) => state.articles);
   useEffect(() => {
     dispatch(articlesActions.getArticles());
-  }, [data]);
+  }, [dispatch]);
 
   return (
     <Box>
-      <Typography>Hello World</Typography>
-      {
-        data && data.map((article) =>
-          <ArticleDisplay article={article} />
-        )
+
+      {data?.length
+        ? (<>
+          {data.map((article: Articles) => (
+            <ArticleDisplay article={article} />
+          ))}
+
+        </>)
+        : (<Typography>Now Loading</Typography>)
       }
-
     </Box>
-  );
+  )
 }
-
 export default ArticlesList;
