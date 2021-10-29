@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 import * as express from "express";
 import { Categories, SubCategories } from '../models/Categories';
 import { ServerDetails, ServerResponses } from '../config/serverResponses';
-import { generatedId } from '../services/idGenerator';
+import { generateId } from '../services/idGenerator';
 
 const categoriesMiddlewares = require('../middlewares/categories');
 const categoriesQueries = require('../SQLqueries/categories');
@@ -83,7 +83,7 @@ const getOneSubCategory = (req: express.Request, res: express.Response) => {
 
 const postCategory = (req: express.Request, res: express.Response) => {
   const { title } = req.body;
-  const id = generatedId();
+  const id = generateId();
   const { error } = Joi.object(categoriesMiddlewares.postCategoryValidationObject).validate({ id, title }, { abortEarly: false });
   if (error)
   {
@@ -115,7 +115,7 @@ const postCategory = (req: express.Request, res: express.Response) => {
 
 const postSubCategory = (req: express.Request, res: express.Response) => {
   const { title, id_category } = req.body;
-  const id = generatedId();
+  const id = generateId();
   const { error } = Joi.object(categoriesMiddlewares.postSubCategoryValidationObject).validate({ id, id_category, title }, { abortEarly: false });
   if (error)
   {
