@@ -1,6 +1,5 @@
 import createSagaMiddleware, { SagaMiddleware } from "@redux-saga/core";
 import { Store, createStore, compose, applyMiddleware } from "redux"
-import { promiseMiddleware } from "redux-saga-promise-actions";
 import rootReducer from "./rootReducer"
 import { rootSaga } from "./rootSaga";
 
