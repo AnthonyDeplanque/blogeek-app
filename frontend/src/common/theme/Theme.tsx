@@ -5,14 +5,14 @@ import { red } from "@material-ui/core/colors";
 export const BULLET = `•`;
 export const cardRadius = 20;
 
-const primaryColor = "#9F6DB5";
-const primaryLightColor = "#BF84C3";
-const primaryDarkColor = "#7F55A6";
+const primaryColor = "#A13E5F";
+const primaryLightColor = "#D25482";
+const primaryDarkColor = "#89324D";
 const primaryContrastTextColor = "#FAFAFA";
 
-const secondaryColor = "#4CA749";
-const secondaryLightColor = "#72CC4B";
-const secondaryDarcColor = "#258247";
+const secondaryColor = "#115689";
+const secondaryLightColor = "#449CBF";
+const secondaryDarcColor = "#013554";
 const secondaryContrastTextColor = "#FAFAFA";
 
 export const lightBackgroundColor = "#FAFAFA";
@@ -43,7 +43,8 @@ const theme = createTheme(adaptV4Theme({
 
   palette: {
     text: {
-      primary: primaryContrastTextColor
+      primary: primaryContrastTextColor,
+      secondary: "#7D7D7D"
     },
 
     primary: {

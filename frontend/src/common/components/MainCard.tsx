@@ -6,15 +6,16 @@ import { cardRadius } from '../theme/Theme';
 import HeaderMainCard from './HeaderMainCard';
 interface MainCardProps {
   title?: string;
+  style?: any;
 }
 
 const MainCard: React.FC<MainCardProps> = (props) => {
   const theme = useTheme();
-  const { title } = props;
+  const { title, style } = props;
   return (
-    <Box display="flex" flexDirection="column" justifyContent="flex-start" margin={theme.spacing(2)} width="80%" borderRadius={`${cardRadius}px`} boxShadow="1px 1px 3px rgba(0,0,0,0.4)" >
+    <Box style={style} display="flex" flexDirection="column" justifyContent="flex-start" margin={theme.spacing(2)} width="80%" borderRadius={`${cardRadius}px`} boxShadow="0px 0px 8px rgba(255,255,230,0.6)" >
       <HeaderMainCard title={title} />
-      <Box>{props.children}</Box>
+      <Box padding={theme.spacing(1)}>{props.children}</Box>
     </Box >
   )
 }

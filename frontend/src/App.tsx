@@ -1,12 +1,13 @@
 import React from 'react';
-import ArticlesList from './articles/pages/ArticlesList'
 import CssBaseline from "@mui/material/CssBaseline";
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 import store from './redux/store';
 import theme from './common/theme/Theme';
-import { StyledEngineProvider, Theme, ThemeProvider } from "@mui/material/styles";
+import { StyledEngineProvider, ThemeProvider } from "@mui/material/styles";
 import { StylesProvider } from '@material-ui/core/styles';
+import Layout from './layouts/pages/Layout';
+import AppRoutes from './AppRoutes';
 
 interface props { };
 const App: React.FC<props> = () => {
@@ -19,9 +20,11 @@ const App: React.FC<props> = () => {
         <Provider store={store}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
-            <BrowserRouter>
-              <ArticlesList />
-            </BrowserRouter>
+            <Router>
+              <Layout>
+                <AppRoutes />
+              </Layout>
+            </Router>
           </ThemeProvider>
         </Provider>
       </StyledEngineProvider>
