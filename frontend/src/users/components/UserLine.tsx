@@ -12,18 +12,18 @@ interface UserLineProps {
 const UserLine: React.FC<UserLineProps> = (props) => {
   const { user } = props;
   const theme = useTheme();
-  return (<Box style={{ backgroundColor: "white" }} display="grid" gridTemplateColumns="1fr,1fr,1fr,1fr,1fr,1fr,1fr">
-
-    <Typography>{user.nick_name}</Typography>
-    <Typography>{BULLET}</Typography>
-    <Typography>{user.email}</Typography>
-    <Typography>{BULLET}</Typography>
-    <Typography>{user.inscription_time}</Typography>
-    <Typography>{BULLET}</Typography>
-    <Box display="flex" flexDirection="row">{user.role && user.role.map(role => {
-      return (<Typography style={{ padding: theme.spacing(1, 1, 1, 1) }}>{role}</Typography>)
-    })}</Box>
-  </Box>
+  return (
+    <Box width="100%" display="grid" style={{ gridTemplateColumns: "1fr .3fr 1fr .3fr 1fr .3fr 1fr" }}>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start"><Typography>{user.nick_name}</Typography></Box>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center"><Typography>{BULLET}</Typography></Box>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center"><Typography>{user.email}</Typography></Box>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center"><Typography>{BULLET}</Typography></Box>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center"><Typography>{user.inscription_time}</Typography></Box>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center"><Typography>{BULLET}</Typography></Box>
+      <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-end"><Box display="flex" flexDirection="column">{user.role && user.role.map(role => {
+        return (<Box display="flex" justifyContent="flex-end"><Typography>{role}</Typography></Box>)
+      })}</Box></Box>
+    </Box>
   )
 }
 export default UserLine;

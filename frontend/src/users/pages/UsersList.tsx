@@ -10,6 +10,7 @@ import UserLine from "../components/UserLine"
 import usersActions from "../redux/usersActions"
 import { Users } from "../../models/Users"
 import { useTheme } from "@mui/material"
+import Loading from "../../common/components/Loading"
 
 interface UsersListProps { };
 const UsersList: React.FC<UsersListProps> = (props) => {
@@ -22,30 +23,38 @@ const UsersList: React.FC<UsersListProps> = (props) => {
   }, [])
 
   return (
-    <MainCard title="Liste des utilisateurs" style={{ width: "100%", height: "100%" }}>
-      {data &&
-        <AutoSizer>
-          {({ height, width }) => (
-            <FixedSizeList
-              height={height}
-              width={width}
-              itemCount={data.length}
-              itemSize={70}>
-              {({ index, style }) => {
-                const user: Users = data[index]
-                console.log(user);
-                return (
-                  <Box height={70} style={style}>
-                    <UserLine user={user} />
-                    {index < data.length - 1 ? <Divider /> : ''}
-                  </Box>
-                )
-              }}
-            </FixedSizeList>
-          )}
-        </AutoSizer>
-      }
-    </MainCard>
+    data && data.length ?
+      (<MainCard title="Liste des utilisateurs">
+
+        {data.map((user: Users, index) => {
+          return (<>
+            <UserLine user={user} />
+            {index < data.length - 1 ? <Divider style={{ backgroundColor: `${theme.palette.primary.contrastText}66` }} /> : ''}
+          </>)
+        })
+          // <AutoSizer>
+          //   {({ height, width }) => (
+          //     <FixedSizeList
+          //       height={height}
+          //       width={width}
+          //       itemCount={data.length}
+          //       itemSize={70}>
+          //       {({ index, style }) => {
+          //         const user: Users = data[index]
+          //         console.log(user);
+          //         return (
+          //           <Box height={70} style={style}>
+          //             <UserLine user={user} />
+          //             {index < data.length - 1 ? <Divider /> : ''}
+          //           </Box>
+          //         )
+          //       }}
+          //     </FixedSizeList>
+          //   )}
+          // </AutoSizer>
+        }</MainCard >)
+      : <Loading />
+
   )
 }
 export default UsersList;

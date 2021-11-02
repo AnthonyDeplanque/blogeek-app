@@ -11,17 +11,15 @@ const Layout: React.FC<LayoutProps> = (props) => {
   const theme = useTheme();
   const [navBarOpen, setNavBarOpen] = useState<boolean>(false);
 
-
   const onItemClicked = (path: string) => {
     setNavBarOpen(!navBarOpen);
   };
 
   return (
     <Box display="block">
-
       <Box width="100%" height="100%" display="flex" flexDirection="column" margin={0} padding={0}>
-        <Box display="flex" flexDirection="row" alignItems="center" width="100vw" height={`${topbarHeight}px`} style={{ width: "100vw", backgroundColor: theme.palette.primary.dark }} >
-          <Menu onClick={() => setNavBarOpen(!navBarOpen)} />
+        <Box display="flex" flexDirection="row" alignItems="center" width="100vw" minHeight={`${topbarHeight}px`} height={`${topbarHeight}px`} style={{ width: "100vw", backgroundColor: theme.palette.primary.dark }} >
+          <Box padding={theme.spacing(0, 2, 0, 2)}><Menu fontSize="large" onClick={() => setNavBarOpen(!navBarOpen)} /> </Box>
         </Box>
         <Drawer anchor="left" PaperProps={{
           style: {

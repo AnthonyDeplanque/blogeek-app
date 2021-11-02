@@ -8,7 +8,7 @@ import reportWebVitals from './reportWebVitals';
 ReactDOM.render(
 
   <React.StrictMode>
-    <Box display="flex" width="100%" height="100%" margin="0" padding="0">
+    <Box display="flex" width="100vw" height="100vh" margin="0" padding="0">
       <App />
     </Box>
   </React.StrictMode>

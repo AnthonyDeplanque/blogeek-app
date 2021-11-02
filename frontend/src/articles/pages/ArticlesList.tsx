@@ -8,6 +8,7 @@ import articlesActions from "../redux/articlesActions";
 import { Box } from '@mui/system';
 import { Typography, useTheme } from '@mui/material';
 import { Articles } from '../../models/Articles';
+import Loading from "../../common/components/Loading";
 
 
 interface ArticlesListProps { }
@@ -20,18 +21,14 @@ const ArticlesList: React.FC<ArticlesListProps> = () => {
     dispatch(articlesActions.getArticles());
   }, [dispatch]);
 
-  return (
-    <Box margin={theme.spacing(1)}>
-      {data?.length
-        ? (<>
-          {data.map((article: Articles) => (
-            <ArticleDisplay article={article} />
-          ))}
+  return data?.length
+    ? (<>
+      {data.map((article: Articles) => (
+        <ArticleDisplay article={article} />
+      ))}
 
-        </>)
-        : (<Typography>Now Loading</Typography>)
-      }
-    </Box>
-  )
+    </>)
+    : <Loading />
+
 }
 export default ArticlesList;

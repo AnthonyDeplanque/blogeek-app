@@ -22,17 +22,18 @@ const Navbar: React.FC<LocationNavBarProps> = (props) => {
             style={{
                 height: `100%`,
                 width: "250px",
-                backgroundColor: theme.palette.secondary.dark,
+                background: `linear-gradient(0.65turn,${theme.palette.secondary.light},${theme.palette.secondary.dark})`,
                 borderRadius: navBarBackgroundRadius,
                 paddingBottom: "100px",
-                overflowY: "auto"
-
+                overflowY: "auto",
+                borderTop: `3px solid ${theme.palette.secondary.dark}`,
+                borderRight: `3px solid ${theme.palette.secondary.dark}`,
             }}>
             <List
                 style={{
                     height: `100vh - ${topbarHeight}`,
                     width: "240px",
-                    backgroundColor: theme.palette.secondary.dark,
+                    backgroundColor: 'transparent',
                     margin: "0",
                     color: theme.palette.primary.contrastText,
                     padding: theme.spacing(5, 0, 0, 0),

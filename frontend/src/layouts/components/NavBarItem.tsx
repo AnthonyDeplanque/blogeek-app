@@ -78,8 +78,6 @@ const NavBarItem: React.FC<NavBarItemProps> = ({ item, level }) => {
     const theme = useTheme();
 
     useEffect(() => {
-        console.log(pathname);
-        console.log(history);
         if (needsToBeOpened(pathname, item))
         {
             setOpen(true);
@@ -151,8 +149,8 @@ const NavBarItem: React.FC<NavBarItemProps> = ({ item, level }) => {
                                 variant="body2"
                                 style={
                                     level === 0
-                                        ? { color: theme.palette.primary.contrastText, fontWeight: "bold" }
-                                        : { color: theme.palette.primary.contrastText, fontWeight: "normal" }
+                                        ? { color: theme.palette.primary.contrastText, fontWeight: "bold", textShadow: `0px 0px 6px ${theme.palette.background.default}` }
+                                        : { color: theme.palette.primary.contrastText, fontWeight: "normal", textShadow: `0px 0px 6px ${theme.palette.background.default}` }
                                 }>
                                 {item.title}
                             </Typography>
