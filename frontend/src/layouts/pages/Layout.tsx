@@ -1,8 +1,9 @@
 import { Menu } from "@material-ui/icons";
-import { Drawer, useTheme } from "@mui/material";
+import { Drawer, Typography, useTheme } from "@mui/material";
 import { Box } from "@mui/system";
 
 import React, { useState } from 'react';
+import Login from "../../authentication/components/Login";
 import Navbar from "../components/NavBar";
 
 interface LayoutProps { };
@@ -18,8 +19,9 @@ const Layout: React.FC<LayoutProps> = (props) => {
   return (
     <Box display="block">
       <Box width="100%" height="100%" display="flex" flexDirection="column" margin={0} padding={0}>
-        <Box display="flex" flexDirection="row" alignItems="center" width="100vw" minHeight={`${topbarHeight}px`} height={`${topbarHeight}px`} style={{ width: "100vw", backgroundColor: theme.palette.primary.dark }} >
+        <Box display="flex" flexDirection="row" alignItems="center" justifyContent="space-between" width="100vw" minHeight={`${topbarHeight}px`} height={`${topbarHeight}px`} style={{ width: "100vw", backgroundColor: theme.palette.primary.dark }} >
           <Box padding={theme.spacing(0, 2, 0, 2)}><Menu fontSize="large" onClick={() => setNavBarOpen(!navBarOpen)} /> </Box>
+          <Box padding={theme.spacing(0, 2, 0, 2)}><Typography variant="h2">BLOGEEK APP</Typography></Box>
         </Box>
         <Drawer anchor="left" PaperProps={{
           style: {
@@ -31,9 +33,10 @@ const Layout: React.FC<LayoutProps> = (props) => {
           }
         }} open={navBarOpen} onClose={() => setNavBarOpen(false)}>
           <Navbar onItemClicked={onItemClicked} />
-        </Drawer>
-        <Box display="flex" flexDirection="column" alignItems="center" alignSelf="center" justifyContent="center">
-          {props.children}
+        </Drawer><Box display="flex" flexDirection="row" width="100%">
+          <Box display="flex" flexDirection="column" width="80%" alignItems="center" alignSelf="center" justifyContent="center">
+            {props.children}
+          </Box> <Box width="20%"><Login /></Box>
         </Box>
       </Box>
     </Box>

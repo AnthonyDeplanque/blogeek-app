@@ -1,4 +1,5 @@
 import { all, call, put, takeLatest } from "redux-saga/effects";
+import { Articles } from "../../models/Articles";
 import { fetchApi } from "../../utils/axiosApi"
 import articlesActions, { GET_ARTICLES } from "./articlesActions"
 
@@ -11,7 +12,11 @@ export function* articlesSaga() {
 function* getArticlesFromDatabase() {
   try
   {
-    const { data } = yield call(fetchApi, "articles");
+    let { data } = yield call(fetchApi, "articles");
+    data.forEach(async (article: Articles) => {
+      const user = fetchApi(`users/${article.id_user}`).then(res => res.data);
+      article.creator = await user;
+    })
     yield put(articlesActions.getArticlesSuccess(data));
   }
   catch (error)

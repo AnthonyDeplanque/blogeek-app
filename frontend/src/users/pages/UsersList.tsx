@@ -1,8 +1,6 @@
 import { Box, Divider } from "@material-ui/core"
 import { useDispatch } from "react-redux"
 import { useEffect } from "react"
-import AutoSizer from "react-virtualized-auto-sizer"
-import { FixedSizeList } from "react-window"
 import MainCard from "../../common/components/MainCard"
 import { useTypedSelector } from "../../redux/rootReducer"
 import RootState from "../../redux/rootState"

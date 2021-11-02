@@ -13,7 +13,7 @@ const UserLine: React.FC<UserLineProps> = (props) => {
   const { user } = props;
   const theme = useTheme();
   return (
-    <Box width="100%" display="grid" style={{ gridTemplateColumns: "1fr .3fr 1fr .3fr 1fr .3fr 1fr" }}>
+    <Box padding={theme.spacing(1)} width="100%" display="grid" style={{ gridTemplateColumns: "1fr .3fr 1fr .3fr 1fr .3fr 1fr" }}>
       <Box display="flex" flexDirection="row" alignItems="center" justifyContent="flex-start"><Typography>{user.nick_name}</Typography></Box>
       <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center"><Typography>{BULLET}</Typography></Box>
       <Box display="flex" flexDirection="row" alignItems="center" justifyContent="center"><Typography>{user.email}</Typography></Box>

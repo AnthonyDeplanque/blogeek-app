@@ -69,6 +69,9 @@ const theme = createTheme(adaptV4Theme({
   },
   overrides: {
     MuiTypography: {
+      root: {
+        fontFamily: "Roboto"
+      },
       h1: {
         fontSize: 36,
       },
