@@ -1,0 +1,6 @@
+[submodule "blogeek-backEnd"]
+	path = blogeek-backEnd
+	url = git@github.com:AnthonyDeplanque/blogeek-backEnd.git
+[submodule "blogeek-frontEnd"]
+	path = blogeek-frontEnd
+	url = git@github.com:AnthonyDeplanque/blogeek-frontEnd.git
